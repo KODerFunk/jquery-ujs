@@ -187,16 +187,16 @@
 
         function buildParamsInputs(key, value) {
           switch (typeof value) {
-            case 'array':
-              var result = [];
-              for (var i = 0, l = value.length; i < l; i++) {
-                result.push( buildParamsInputs(key === null ? i : key + '[' + i + ']', value[i]) );
-              }
-              return result.join('');
             case 'object':
               var result = [];
-              for (var i in value) {
-                result.push( buildParamsInputs(key === null ? i : key + '[' + i + ']', value[i]) );
+              if ($.isArray(value)) {
+                for (var i = 0, l = value.length; i < l; i++) {
+                  result.push( buildParamsInputs(key === null ? i : key + '[]', value[i]) );
+                }
+              } else {
+                for (var i in value) {
+                  result.push( buildParamsInputs(key === null ? i : key + '[' + i + ']', value[i]) );
+                }
               }
               return result.join('');
             default:
